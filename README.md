@@ -1,2 +1,0 @@
-# nwk
-Node Web Kit
