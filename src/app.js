@@ -22,11 +22,11 @@ var client = new WebTorrent();
 var options = {
   name: "My Site",            // name of the torrent (default = basename of `path`)
   comment: "A pretty cool thing!",         // free-form textual comments of the author
-  createdBy: "Graham Baker"       // name and version of program used to create torrent
+  createdBy: "Jon Sims"       // name and version of program used to create torrent
 }
 
 var magURI = 'magnet:?xt=urn:btih:f760d2d7981fd37151cd2a499a1c05afd5d841b8&dn=Idiot%27s+Guides%3A+Basic+Math+and+Pre-Algebra+-+Carolyn+Wheater+&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969';
-var localURI = '/system/test/test.html'; 
+var localURI = './test.html'; 
 
 download(magURI);
 
@@ -46,7 +46,8 @@ function download (infoHash) {
     // })
     console.log('using magnet uri: ' + infoHash);
     client.add(infoHash, function onTorrent (torrent) {
-		console.log(torrent);
+//		console.log(client);
+//	console.sleep(5000);
 	  console.log('Torrent info hash: ' + torrent.infoHash + ' <a href="/#'+torrent.infoHash+'">(link)</a><br>')
 	  console.log('Downloading from ' + torrent.swarm.wires.length + ' peers<br>')
 	  console.log('progress: starting...')
@@ -56,7 +57,11 @@ function download (infoHash) {
 	  	console.log('swarm on download!!');
 	    var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
 	    console.log('progress: ' + progress + '% -- download speed: ' + prettysize(torrent.swarm.downloadSpeed()) + '/s<br>');
-
+	      torrent.files.forEach(function (file) {
+		  var source = file.createReadStream();
+		  var destination = fs.createWriteStream(file.name);
+		  source.pipe(destination);
+	      });
 	  });
 
 
