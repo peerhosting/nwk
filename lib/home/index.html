@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>host</title>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script>
+       console.log('welcome home'); 
+
+       $('#upload').click(function(){
+        $.get('/upload');
+       });
+    </script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <a class="navbar-brand" href="/">peer to peer hosting</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a id="browse">surf</a>
+      </li>
+      <li>
+        <a id="upload">upload</a>
+      </li>
+    </ul>
+  </nav>
+    <div class="jumbotron">
+
+      <div class="container">
+        <div class=" row">
+          <span class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></span>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <h2 class="text-center">Peer to Peer Hosting Platform</h2>
+          </div>
+          <span class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></span>    
+            
+        </div>
+        
+
+        <div id="upload" class="well center col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-center">
+              <a href="/browse" id='download' class="btn btn-primary btn-lg"> Browse! </a>
+            </p>
+            <p id="files"></p>
+            <p id="testing"></p>
+            
+
+
+          </div>
+          <div id="seedMe" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-center">
+              <a href="/upload" id='seed' class="btn btn-primary btn-lg"> Upload! </a>
+            </p>
+            <p id="upload"></p>
+          </div>  
+        </div>      
+        
+      </div>
+    </div>
+
+    <div class="well footer navbar-fixed-bottom text-center">
+      <h3>Graham Baker & Jon Sims <br><small>Capstone 2015</small> </h3>
+    </div>
+
+  </body>
+</html>
