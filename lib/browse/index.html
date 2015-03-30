@@ -25,7 +25,7 @@
         <h1>LETZ DO SOME BROWSING</h1>
         
         <p>
-          <a class="btn btn-primary btn-lg">get my site!</a>
+          <a id="geter" class="btn btn-primary btn-lg">get my site!</a>
         </p>
 
 
@@ -37,6 +37,21 @@
   </body>
 
   <script type="text/javascript">
-    
+
+  $('#geter').onclick(function(){
+        $.ajax({
+        url: '/browse', 
+        type: 'get',
+        //data: json_data,
+        success: function(data) {
+          alert('just came back from the server..');
+
+          console.log( data );
+        }, 
+        
+      });
+  });
+
+
   </script>
 </html>
