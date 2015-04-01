@@ -34,24 +34,68 @@
       </div>
     </div>
 
+    <div class="container" id="magLinkCon"> 
+    </div>
+
   </body>
 
   <script type="text/javascript">
 
-  $('#geter').onclick(function(){
-        $.ajax({
-        url: '/browse', 
-        type: 'get',
-        //data: json_data,
-        success: function(data) {
-          alert('just came back from the server..');
+  $(document).ready(function(){ 
+    $('#geter').click(function(){
 
-          console.log( data );
-        }, 
-        
-      });
+          $.ajax({
+            url: '/magnetURI', 
+            type: 'get', 
+            success: function(data){
+              var mag = JSON.parse(data);
+              console.log(mag);
+              var newLink;
+
+              jQuery.each(mag, function(key, val) {
+                jQuery('<p/>', {
+                    class: 'magnet',
+                    text: val
+                }).appendTo('#magLinkCon');
+
+              });
+              
+            }
+          });
+    });
+
+
+    $("#magLinkCon").on('click', 'p.magnet', function() {
+        console.log($(this).text());
+        var magLink = $(this).text();
+        var mag = {
+          'mag' : magLink
+        }
+
+       $.ajax({
+         url: '/browse', 
+         type: 'post', 
+         data: mag,
+         success: function(data){
+           alert(data);
+         }
+       });
+
+    });
+      
+      
+      // $('.magnet').on('click'
+      //     console.log(this.text());
+      //       $.ajax({
+      //         url: '/browse', 
+      //         type: 'post', 
+      //         success: function(data){
+      //           alert(data);
+      //         }
+      //       });
+      // });
   });
-
+  
 
   </script>
 </html>

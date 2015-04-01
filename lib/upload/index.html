@@ -11,24 +11,27 @@
     <script src="nwk/lib/upload/js/controller.js"></script> -->
 
     <style>
-      #progress_bar {
-        margin: 10px 0;
-        padding: 3px;
-        border: 1px solid #000;
-        font-size: 14px;
-        clear: both;
-        opacity: 0;
-        -moz-transition: opacity 1s linear;
-        -o-transition: opacity 1s linear;
-        -webkit-transition: opacity 1s linear;
+
+
+      #filedrag
+      {
+        display: none;
+        font-weight: bold;
+        text-align: center;
+        padding: 1em 0;
+        margin: 1em 0;
+        color: #555;
+        border: 2px dashed #555;
+        border-radius: 7px;
+        cursor: default;
       }
-      #progress_bar.loading {
-        opacity: 1.0;
-      }
-      #progress_bar .percent {
-        background-color: #99ccff;
-        height: auto;
-        width: 0;
+
+      #filedrag.hover
+      {
+        color: #f00;
+        border-color: #f00;
+        border-style: solid;
+        box-shadow: inset 0 3px 4px #888;
       }
     </style>
 
@@ -48,23 +51,61 @@
     </ul>
   </nav>
 
+
+    <hr> 
+
     <div class="jumbotron">
+
       <div class="container">
-        <h1> lets upload our site </h1>
-        <br>
 
-        <input type="file" id="files" name="file" />
-        <button onclick="abortRead();">Cancel read</button>
-        <div id="progress_bar"><div class="percent">0%</div></div>
 
-        <button id='up'>Upload!</button>
+        <div class="input-group">
+
+          <form id = "uploadFile" enctype="multipart/form-data" action="/fileupload" method="post">
+            <input type="file", name="file", id="file" />
+           <!--  <div id="filedrag">or drop files here</div> -->
+          
+            <input id="upload" class="btn btn-primary btn-lg" type="submit" value="Upload">  
+          </form>
+
+
+        </div>
+
       </div>
-
     </div>
-
   </body>
   <script>
+  // call initialization file
+  // if (window.File && window.FileList && window.FileReader) {
+  //   Init();
+  // }
 
+  // //
+  // // initialize
+  // function Init() {
+
+  //   var fileselect = $("fileselect"),
+  //     filedrag = $id("filedrag"),
+  //     submitbutton = $id("");
+
+  //   // file select
+  //   fileselect.addEventListener("change", FileSelectHandler, false);
+
+  //   // is XHR2 available?
+  //   var xhr = new XMLHttpRequest();
+  //   if (xhr.upload) {
+    
+  //     // file drop
+  //     filedrag.addEventListener("dragover", FileDragHover, false);
+  //     filedrag.addEventListener("dragleave", FileDragHover, false);
+  //     filedrag.addEventListener("drop", FileSelectHandler, false);
+  //     filedrag.style.display = "block";
+      
+  //     // remove submit button
+  //     submitbutton.style.display = "none";
+  //   }
+
+  // }
   // controller.js
   $(document).ready(function(){
 
@@ -156,7 +197,20 @@
     // inputElement.addEventListener("change", handleFiles, false);
 
 
+    // $('#uploadFile').click(function(){
+    //   $.ajax({
+    //     url: '/fileupload', 
+    //     type: 'post',
+    //     //data: json_data,
+    //     success: function(data) {
+    //       alert('just came back from the server..');
 
+    //       console.log( data );
+    //     }, 
+        
+    //   });
+
+    // });
 
     $('#up').click(function(){
       // if(fifi == null){
