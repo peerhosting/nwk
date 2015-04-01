@@ -6,7 +6,8 @@ var home = require('./lib/home');
 var browse = require('./lib/browse');
 var upload = require('./lib/upload');
 var navigate = require('./lib/navigate');
-app.use(express.static(path.join(__dirname, 'client')));
+// console.log(path.join(__dirname, './local'));
+app.use(express.static(path.join(__dirname, './lib/local')));
 
 app.use(home);
 app.use(browse);

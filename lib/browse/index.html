@@ -77,7 +77,8 @@
          type: 'post', 
          data: mag,
          success: function(data){
-           alert(data);
+          console.log(data);
+          window.location.href = data;
          }
        });
 
