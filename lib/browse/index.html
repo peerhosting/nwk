@@ -7,13 +7,22 @@
     <script src="http://code.jquery.com/jquery.js"></script>
     <!-- Bootstrap JavaScript -->
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <style type="text/css">
+    .magnet {
+
+    }
+    .magnet:hover {
+      color: white;
+      background-color: black;
+    }
+    </style>
   </head>
   <body>
   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <a class="navbar-brand" href="/">peer to peer hosting</a>
+    <a class="navbar-brand" href="/">colony</a>
     <ul class="nav navbar-nav">
       <li>
-        <a href="/browse">surf</a>
+        <a href="/browse">browse</a>
       </li>
       <li>
         <a href="/upload">upload</a>
@@ -22,47 +31,41 @@
   </nav>
     <div class="jumbotron">
       <div class="container">
-        <h1>LETZ DO SOME BROWSING</h1>
+        <h1></h1>
+        <div class="container" id="magLinkCon"> 
+        </div>
         
-        <p>
-          <a id="geter" class="btn btn-primary btn-lg">get my site!</a>
-        </p>
-
-
-
 
       </div>
     </div>
 
-    <div class="container" id="magLinkCon"> 
-    </div>
+    
 
   </body>
 
   <script type="text/javascript">
 
   $(document).ready(function(){ 
-    $('#geter').click(function(){
 
-          $.ajax({
-            url: '/magnetURI', 
-            type: 'get', 
-            success: function(data){
-              var mag = JSON.parse(data);
-              console.log(mag);
-              var newLink;
+      $.ajax({
+        url: '/magnetURI', 
+        type: 'get', 
+        success: function(data){
+          var mag = JSON.parse(data);
+          console.log(mag);
+          var newLink;
 
-              jQuery.each(mag, function(key, val) {
-                jQuery('<p/>', {
-                    class: 'magnet',
-                    text: val
-                }).appendTo('#magLinkCon');
+          jQuery.each(mag, function(key, val) {
+            jQuery('<h4/>', {
+                class: 'magnet',
+                text: val
+            }).appendTo('#magLinkCon');
 
-              });
-              
-            }
           });
-    });
+          
+        }
+      });
+
 
 
     $("#magLinkCon").on('click', 'p.magnet', function() {
@@ -85,16 +88,6 @@
     });
       
       
-      // $('.magnet').on('click'
-      //     console.log(this.text());
-      //       $.ajax({
-      //         url: '/browse', 
-      //         type: 'post', 
-      //         success: function(data){
-      //           alert(data);
-      //         }
-      //       });
-      // });
   });
   
 
