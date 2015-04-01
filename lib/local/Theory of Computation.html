@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0071)http://mathcs.pugetsound.edu/~adamasmith/cs361/secrets/lecs/theory.html -->
+<html data-ember-extension="1"><script type="text/javascript">(function () {
+      return window.SIG_EXT = {};
+    })()</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Theory of Computation</title>
+  <link rel="stylesheet" href="./Theory of Computation_files/lectures.css" type="text/css">
+  <link rel="stylesheet" href="./Theory of Computation_files/purple.css" type="text/css">
+  <script src="./Theory of Computation_files/scripts.js"></script><style type="text/css"></style>
+</head>
+
+<body data-feedly-mini="yes">
+<div class="innerpage">
+
+<h1>Theory of Computation</h1>
+
+<p>
+<i>In which we discuss computability classes.</i>
+
+</p><p>
+At the very beginning of the class, we saw this chart:
+
+</p><table class="datatable" width="90%">
+  <tbody><tr class="nohighlight"><th>Order</th><th>1970s</th><th>1980s</th><th>1990s</th><th>2000s</th></tr>
+  <tr><td class="math">1</td><td>any</td><td>any</td><td>any</td><td>any</td></tr>
+  <tr><td class="math">log&nbsp;n</td><td>any</td><td>any</td><td>any</td><td>any</td></tr>
+  <tr><td class="math">n</td><td>millions</td><td>10s of millions</td><td>100s of millions</td><td>billions</td></tr>
+  <tr><td class="math">n&nbsp;log&nbsp;n</td><td>100s of thousands</td><td>millions</td><td>millions</td><td>100s of millions</td></tr>
+  <tr><td class="math">n²</td><td>hundreds</td><td>~thousand</td><td>thousands</td><td>10s of thousands</td></tr>
+  <tr><td class="math">n³</td><td>~hundred</td><td>hundreds</td><td>~thousand</td><td>thousands</td></tr>
+  <tr><td class="math">C<sup>n</sup></td><td>~20</td><td>20s</td><td>20s</td><td>~30</td></tr>
+</tbody></table>
+
+<p>
+It’s pretty intuitive, and the results are not particularly surprising:
+</p><ul>
+  <li>Linear/logarithmic/constant-time algorithms are wonderful.</li>
+  <li>Even up to cubic algorithms can be usable, in the right situation.</li>
+  <li>Exponential algorithms are very, very bad.</li>
+</ul>
+
+<p>
+It turns out that there are some fundamental mathematical questions here:
+</p><ul>
+  <li>Are there some problems that will (probably) never be computable?</li>
+  <li>What does “to be computable” even mean?</li>
+</ul>
+These questions are the domain of <em>theory of computation</em>.
+<ul>
+  <li>In many respects, “theory” is closer to math than to CS.</li>
+</ul>
+
+<h2>P &amp; NP</h2>
+
+<p>
+We’ll start out by talking about two groups of problems, that we’re going to call <em>P</em> and <em>NP</em>.
+
+</p><h3>P</h3>
+<p>
+If we take a step back, we can consider problems that have linear, logarithmic, linear, quadratic, and cubic solutions all part of one big class.
+</p><ul>
+  <li>Very loosely, this is the class of “easy problems”.</li>
+  <li>Almost every problem we have worked on this semester is part of this class.</li>
+  <ul>
+    <li>Sorting objects.</li>
+    <li>Making symbol tables.</li>
+    <li>Finding certain properties of graphs.</li>
+  </ul>
+</ul>
+
+<p>
+In fact, we’re going to make this class of problems even bigger.
+</p><ul>
+  <li>If a problem is of order <var>Θ(n<sup>C</sup>)</var> where <var>C</var> is any constant, it’s good enough.</li>
+  <ul>
+    <li>So quartic, quintic, etc. algorithms all count.</li>
+    <li>Maybe such problems aren’t practically solvable now, but they likely will be one day.</li>
+  </ul>
+  <li>Since these are problems with solutions that can be found in <u>p</u>olynomial time, we will name this class of problems <em>P</em>.</li>
+</ul>
+  
+<h3>NP</h3>
+
+<p>
+Another class of problems is <em>NP</em>, which are problems that can be solved in <u>n</u>ondeterministic <u>p</u>olynomial time.
+</p><ul>
+  <li>Like P, such problems can be solved in polynomial time.</li>
+  <li>Unlike P, you would need a <em>nondeterministic</em> algorithm to run it.</li>
+</ul>
+
+<p>
+A nondeterministic algorithm is one that can be in many states simultaneously.
+</p><ul>
+  <li>For example, say we’re playing <i>“guess the number”</i>—I guess a number between <var>1</var>&nbsp;and&nbsp;<var>n</var>, and you tell me if I got it right.</li>
+  <ul>
+    <li>With deterministic algorithms, the solution is <strong>linear</strong>: I have to try all the numbers one at a time.</li>
+    <li>But if I had a nondeterministic algorithm, there’s a <strong>constant-time</strong> solution. I try all the numbers <strong>simultaneously</strong>.</li>
+  </ul>
+  <li>Another example: if I want to sort <var>n</var> arbitrary integers:</li>
+  <ul>
+    <li>Deterministically, the best solutions are <strong>linearithmic</strong>.</li>
+    <li>Nondeterministically, there is a <strong>linear</strong> sort:</li>
+    <ul>
+      <li>Nondeterministically try all permutations (constant time).</li>
+      <li>Check if the numbers are in order (linear time).</li>
+      <li>Return the permutation that was.</li>
+    </ul>
+  </ul>
+</ul>
+
+<p>
+As of right now, no one really has a nondeterministic computer that can do more than a few trivial problems.
+</p><ul>
+  <li>But people are working on <em>quantum computers</em>—in which each variable can be in all states simultaneously.</li>
+</ul>
+
+<p>
+Put another way: if we had an infinite number of computers, an NP problem is one that we could solve in polynomial time.
+</p><ul>
+  <li>If I had infinite computers, I could find the magic number immediately.</li>
+  <li>However, to properly model NP-completeness, the computers cannot talk amongst themselves.</li>
+  <ul>
+    <li>Each one must determine on its own whether or not it got a correct answer.</li>
+  </ul>
+</ul>
+
+<p>
+Another way of thinking about NP problems is that they are difficult to solve, but really easy to check.
+</p><ul>
+  <li><b>Hard:</b> Given <var>10</var> stones of weights <var>3</var>, <var>3</var>, <var>4</var>, <var>5</var>, <var>5</var>, <var>5</var>, <var>6</var>, <var>7</var>, <var>10</var>, and <var>12</var>, can they be split into 2 piles of equal weight?</li>
+  <ul>
+    <li>There are <var>2<sup>n-1</sup>-1, or <var>511</var> ways to split them into two groups.</var></li>
+    <li>Cycle through them, and see if one of them yields equal weights.</li>
+    <li>If I had <var>100</var> stones, there would be about <var>6.3×10<sup>29</sup></var> ways of splitting them up.</li>
+  </ul>
+  <li><b>Easy:</b> Given a group of stones of weights <var>3</var>, <var>4</var>, <var>5</var>, <var>5</var>, <var>6</var>, and <var>7</var>, and another of weights <var>3</var>, <var>5</var>, <var>10</var>, and <var>12</var>, do these groups have equal weight?
+    <ul><li>Yes: they each sum to 30.</li></ul>
+  </li><li>This example is called the <em>partition problem</em>.</li>
+</ul>
+
+<p>
+<img src="./Theory of Computation_files/P-NP.png" align="right" width="375" height="300">
+Every problem in P is trivially a problem in NP.
+</p><ul>
+  <li>If you can solve a problem with one computer in polynomial time, you could certainly do it with infinite computers.</li>
+  <li>However, if you have an NP solution to a problem, it’s almost impossible to prove that there <strong>can’t</strong> be a P solution.</li>
+  <li>The image at right shows a Venn diagram of the two, with the <var>y</var>-dimension indicating how difficult the problem is.</li>
+</ul>
+
+<h2>The P-NP Problem</h2>
+
+<p>
+Say there’s a problem you want to solve.
+</p><ul>
+  <li>Clearly you prefer the polynomial solution to the exponential solution.</li>
+  <li>But even if you can’t find a polynomial algorithm, you might be able to find a nondeterministic polynomial algorithm.</li>
+  <ul>
+    <li>Doesn’t really help you...but it is a mathematical curiosity.</li>
+    <li>But there are some truly stunning ramifications.</li>
+  </ul>
+</ul>
+
+<h3>NP-Complete</h3>
+
+<p>
+There are a number of problems that are <em>NP-complete</em>, meaning that:
+<img src="./Theory of Computation_files/P-NP-NPC.png" align="right" width="375" height="300">
+</p><ul>
+  <li>It is in NP.</li>
+  <li><strong>Any</strong> other problem in NP is <em>reducible</em> to it in polynomial time.</li>
+    <ul><li>Reducible means that one problem can be rephrased and transformed into the other.</li></ul>
+  <li>So NP-complete is a subset of NP, holding its hardest problems.</li>
+    <ul><li>The diagram at right shows how we <strong>think</strong> NP-complete relates with P and NP.</li></ul>
+</ul>
+
+<p>
+What if I had an NP-complete problem <var>p</var>, and I found a working deterministically-polynomial algorithm for it?
+</p><ul>
+  <li>Then I could do the following:</li>
+  <ul>
+    <li>Take any other arbitrary NP problem.</li>
+    <li>Reduce it to <var>p</var>—taking polynomial time.</li>
+    <li>Solve that problem—also taking polynomial time.</li>
+  <li>Then you will have solved the original NP problem in deterministic, polynomial time—implying that that problem is part of P.</li>
+  </ul>
+</ul>
+
+<p>
+That is, if I were to come up with a deterministic, polynomial solution to <strong>any</strong> NP-complete problem, I would have solved them all!
+<img src="./Theory of Computation_files/P-NPcollapse.png" align="right" width="375" height="300">
+</p><ul>
+  <li>The effect of this would be to collapse the entire relationship between P, NP, and NP-complete.</li>
+  <li>Which would mean that for any problem for which you can make a nondeterministic polynomial solution, there would have to exist a deterministic polynomial solution.</li>
+</ul>
+
+<p>
+You may think that NP-complete problems are rare, but there are hundreds of them!
+</p><ul>
+  <li>Finding a <em>Hamiltonian Path</em>:  a path in a graph that visits each vertex exactly once.</li>
+  <li>The <em>knapsack problem</em>: picking the most valuable subset of weighted items, whose total weight is less than some maximum.</li>
+  <li>The <em>clique problem</em>: finding if there is a set of <var>n</var> mutually connected vertices.</li>
+  <li>Finding a <em>clique cover</em>: determining if a graph can be partitioned into <var>k</var> cliques (sets of mutually-connected vertices).</li>
+  <li>The <em>longest path problem</em>: finding the single longest simple path in a graph.</li>
+  <li>The <em>Boolean satisfiability problem</em>: given a formula of Boolean variables connected by and, or, and not, determining if there exists an assignment of all the variables to make the whole formula true.</li>
+  <li>Making bots to win many games (including Battleship, FreeCell, Candy Crush, Super Mario Bros) has also been shown to be NP-complete.</li>
+</ul>
+The Wikipedia page “List of NP-complete problems” contains 115 of them!
+
+<p>
+In fact, we don’t know of any real problems that are NP but not NP-complete!
+</p><ul>
+  <li>Assuming that P≠NP, we know that this class of problems must exist.</li>
+  <ul>
+    <li>Proven in 1975 by Ladner.</li>
+    <li>Sometimes called <em>NP-intermediate</em>.</li>
+  </ul>
+  <li>The following problems are <i>thought</i> to be in NP-intermediate, but no one’s really sure.</li>
+  <ul>
+    <li>Factoring integers.</li>
+    <li>The discrete log problem (solving <var>b<sup>k = g</sup> for <var>k</var>, in a modular-like space).</var></li>
+    <li>Some math problems using irrational numbers.</li>
+  </ul>
+</ul>
+
+<h3>P≟NP</h3>
+
+<p>
+So, here’s the current problem in research:
+</p><ul>
+  <li>Intuitively, P and NP seem very different.</li>
+  <ul>
+    <li>The former are <i>“solvable problems”</i>.</li>
+    <li>The latter are <i>“not practically solvable”</i>.</li>
+  </ul>
+  <li>And yet, no one’s ever been able to show a single problem that cannot possibly be solved in polynomial time deterministically.</li>
+</ul>
+
+<p>
+Weirdly, we’ve been able to show that many (if not most) NP problems are roughly equivalent.
+</p><ul>
+  <li>If there’s a problem you can think of, with no obvious deterministic, polynomial solution, odds are that it’s in NP-complete.</li>
+  <li>If you were to solve <strong>any one of these</strong>, you would have found a solution to all NP problems.</li>
+  <ul>
+    <li>It would show that P=NP, and the entire diagram would collapse.</li>
+    <li>But despite there being hundreds of NP-complete problems, no one’s ever shown that any one is either definitively in&nbsp;P or not in&nbsp;P.</li>
+  </ul>
+</ul>
+
+<p>
+So this is the million-dollar question.
+</p><ul>
+  <li>Quite literally: it is one of the “Millenium Problems” posed by the Clay Mathematics Institute.</li>
+  <ul>
+    <li>Seven outstanding problems posed in May 2000.</li>
+    <li>Each one has a $1,000,000 prize attached to it.</li>
+    <li>One of them (the <i>Poincaré Conjecture</i>) was solved in 2010.</li>
+  </ul>
+  <li>Since no one’s ever been able to solve any of the NP-complete problems, most people think that P≠NP.</li>
+    <ul><li>But if any of them were solved, it would show that P=NP, and all computer science would be turned on its head.</li></ul>
+</ul>
+
+<p>
+So which one is it?
+</p><table>
+  <tbody><tr><td><img src="./Theory of Computation_files/P-NP-NPC.png" width="375" height="300"></td><td><img src="./Theory of Computation_files/P-NPcollapse.png" width="375" height="300"></td></tr>
+  <tr><td>P≠NP</td><td>P=NP</td></tr>
+</tbody></table>
+
+
+</div>
+
+<div id="feedly-mini" title="feedly Mini tookit"></div></body></html>
