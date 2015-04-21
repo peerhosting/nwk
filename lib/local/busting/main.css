@@ -1,0 +1,117 @@
+html {
+    color: #222;
+    background: rgb(260, 222, 235);
+    font-size: 1em;
+    line-height: 1.4;
+    font-family: serif;
+    text-transform: uppercase;
+}
+
+body {
+    color: rgb(231, 18, 18);
+    height: 300vh;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 13vw;
+    line-height: .666em;
+    font-style: italic;
+    text-align: center;
+    margin-top: 15vh;
+    margin-bottom: 5vw;
+    cursor: pointer; 
+    cursor: hand;
+}
+
+h2 {
+    text-align: center;
+}
+h1, h2 {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+table {
+    max-width: 98vw;
+    margin: 0 auto 0 auto;
+    font-size: 4.4vw;
+}
+
+td, th {
+    border: 5px solid rgb(260, 222, 235);
+    padding: 5px 2px 2px 0px;
+    text-align: left;
+    /*max-width: 10vw;*/
+}
+th {
+    padding-bottom: 0;
+}
+
+td:hover {
+    border: 5px double black;
+    color: black;
+}
+
+@media (min-width: 700px) {
+    table {
+        font-size: 2.3vmin;
+    }
+    td, th {
+        text-align: right;
+        padding: 5px 5px 2px 5px;
+    }
+}
+
+caption {
+    font-weight: bold;
+}
+
+a {
+    color: #1395DB;
+}
+
+a:hover {
+    color: black;
+}
+
+a:visited {
+    color: purple;   
+}
+
+#yeah {
+    padding-top: 260vh;
+    margin-bottom: 7px;
+    text-align: center;
+}
+#yeah a {
+    color: rgb(231, 18, 18);
+    text-decoration: underline;
+}
+
+#yeah a:hover {
+    color: black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
