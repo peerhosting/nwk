@@ -49,6 +49,9 @@
       #warn {
         display: none;
       }
+      .after {
+        display: none;
+      }
 
     </style>
 
@@ -88,8 +91,10 @@
                <h2>Website Name</h2>
                <input type="text" name="name" class="form-control" id="name" placeholder="My Website">
              </div>
-            
-             <br>
+            <button type="button" id="uploadName">Upload name</button>
+        </form>
+
+ <!--             <br>
              <br>
              <br>
              <span class="btn btn-default btn-file">
@@ -104,14 +109,17 @@
           
             <input id="up" class="btn btn-file" type="submit" value="Upload">  
 
-          </form>
 
 
-        </div>
+        </div> -->
 
-        <div class="well col-xs-3 col-sm-3 col-md-3 col-lg-3"> 
+        <div class="after well col-xs-3 col-sm-3 col-md-3 col-lg-3"> 
 
-            <p><button id="upload_btn">Prompt for File</button></p>
+            <p><button id="upload_btn">Upload File</button></p>
+            <p><button id="mk_folder">Make Folder</button></p>
+
+
+
 
         </div>
 
@@ -144,54 +152,86 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
   
   $(document).ready(function(){
 
-        var socket = io.connect('http://localhost:4000');
-        var siofu = new SocketIOFileUpload(socket);
+
+
+       
+
+
+
+    // var selDiv = "";
         
+    // function init() {
+    //   document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+    //   selDiv = document.querySelector("#selectedFiles");
+    //   // var html = "<img src='/images/txt.png'><p>info.txt</p>";
+    //   selDiv.innerHTML += fileToIcon('text.txt');
+    // }
 
-        // Configure the three ways that SocketIOFileUpload can read files:
-        document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
-
-        siofu.addEventListener("complete", function(event){
-            console.log(event.success);
-            console.log(event.file);
-        });
-
-
-
-    var selDiv = "";
-        
-    function init() {
-      document.querySelector('#files').addEventListener('change', handleFileSelect, false);
-      selDiv = document.querySelector("#selectedFiles");
-      // var html = "<img src='/images/txt.png'><p>info.txt</p>";
-      selDiv.innerHTML += fileToIcon('text.txt');
-    }
-
-    init();
+    // init();
 
 
 
 
-    function handleFileSelect(e) {
+    // function handleFileSelect(e) {
      
         
-      if(!e.target.files) return;
+    //   if(!e.target.files) return;
     
-      selDiv.innerHTML = "";
-      var files = e.target.files;
-        var filesArr = Array.prototype.slice.call(files);
-        filesArr.forEach(function(f) {
+    //   selDiv.innerHTML = "";
+    //   var files = e.target.files;
+    //     var filesArr = Array.prototype.slice.call(files);
+    //     filesArr.forEach(function(f) {
 
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            // var html = "<p>" + f.name + "</p>";
-            selDiv.innerHTML += fileToIcon(f.name);       
-          }
-          reader.readAsDataURL(f); 
-        });
-    }
+    //       var reader = new FileReader();
+    //       reader.onload = function (e) {
+    //         // var html = "<p>" + f.name + "</p>";
+    //         selDiv.innerHTML += fileToIcon(f.name);       
+    //       }
+    //       reader.readAsDataURL(f); 
+    //     });
+    // }
+
+    // function getName(){
+
+    //     var json = {
+    //         name : $('#name').val()
+    //     }
+    //     return json;
+    // }
+
+    $('#uploadName').click(function(){
+        $.post( "/fileupload", {
+                name : $('#name').val()
+            }).done(function( data ) {
+                console.log(data);
+                $('.after').show();
+
+                var socket = io.connect('http://localhost:4000');
+                var siofu = new SocketIOFileUpload(socket);
+                
+
+                // Configure the three ways that SocketIOFileUpload can read files:
+                document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
+
+                siofu.addEventListener("complete", function(event){
+                    console.log(event.success);
+                    console.log(event.file);
+                });
+
+                siofu.addEventListener("start", function(event){
+                    event.file.meta.name = data;
+                });
+
+                $('#mk_folder').click(function(){
+                    socket.emit('makeDir', { name: 'cool' });
+                });
 
 
+              });
+
+    });
+
+    
   });
   </script>
 </html>
