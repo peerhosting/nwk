@@ -53,6 +53,10 @@
           display: block;
       }
 
+      #warn {
+        display: none;
+      }
+
 
     </style>
 
@@ -84,30 +88,27 @@
            
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center input-group ">
 
-
+          <!--  -->
 
           <form id = "uploadFile" enctype="multipart/form-data" action="/fileupload" method="post">
 
             <div class="form-group">
                <h2>Website Name</h2>
-               <input type="text" class="form-control" id="name" placeholder="My Website">
+               <input type="text" name="name" class="form-control" id="name" placeholder="My Website">
              </div>
+            
              <br>
              <br>
              <br>
              <span class="btn btn-default btn-file">
-                 Browse <input type="file", name="file", id="files" multiple/>
+                 Browse <input type="file", name="file", id="files" multiple directory webkitdirectory/>
              </span>
              <br>
              <br>
 
             <div id="selectedFiles"></div>
-
-            <br>
-            <br>
-            
           
-            <input id="upload" class="btn btn-file" type="submit" value="Upload">  
+            <input id="up" class="btn btn-file" type="submit" value="Upload">  
 
           </form>
 
@@ -127,26 +128,25 @@
 
     var selDiv = "";
         
-
-    
-
     function init() {
       document.querySelector('#files').addEventListener('change', handleFileSelect, false);
       selDiv = document.querySelector("#selectedFiles");
     }
+
     init();
+
+
+
 
     function handleFileSelect(e) {
      
         
         if(!e.target.files) return;
-        
+      
         selDiv.innerHTML = "";
         var files = e.target.files;
             var filesArr = Array.prototype.slice.call(files);
             filesArr.forEach(function(f) {
-
-              
 
               var reader = new FileReader();
               reader.onload = function (e) {
@@ -155,29 +155,45 @@
               }
               reader.readAsDataURL(f); 
             });
+            // $('#numFiles').val(filesArr.length);
         
       }
 
-  $('#up').click(function(){
-  // if(fifi == null){
-  //   console.log('no files');
-  //   return;  
-  // }
-  
-  // console.log(typeof fifi);
-  // console.log(fifi);
-      //var json_data = JSON.stringify(fifi);
-    
-  $.ajax({
-  url: '/flies', 
-  type: 'post',
-  data: json_data,
-  success: function(data) {
-  alert('just came back from the server..');
-  
-  console.log( data );
-  }})
-});
+
+      function jsonMaker(siteName, files){
+
+
+        return json;
+      }
+
+    // $('#up').click(function(){
+    //   $('#warn').hide();
+    //   //console.log($('#name').val().equals(''));
+    //   // console.log('oafff');
+    //   if($('#name').val().length === 0){
+    //     $('#warn').show();
+    //     return;
+    //   }
+    //   $('#warn').hide();
+    //   var mySite = $('#name').val();
+      
+
+
+
+    //   $.ajax({
+    //     url: '/fileupload', 
+    //     type: 'post',
+    //     data: mySite,
+    //     success: function(data) {
+    //       alert('just came back from the server..');
+
+    //       console.log( data );
+    //     }, 
+        
+    //   });
+      
+
+    // });
 
   });
   </script>
