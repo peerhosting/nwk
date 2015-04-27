@@ -167,7 +167,7 @@
   // console.log(typeof fifi);
   // console.log(fifi);
       //var json_data = JSON.stringify(fifi);
-    
+    $.when(
   $.ajax({
   url: '/flies', 
   type: 'post',
@@ -176,7 +176,26 @@
   alert('just came back from the server..');
   
   console.log( data );
-  }})
+  }}),
+  $.ajax({
+         url: 'cs240-homes.pugetsound.edu:3005',
+         data: '{"data": "TEST"}',
+        type: 'post',
+        jsonpCallback: 'callback', // this is not relevant to the POST anymore
+        success: function (data) {
+            var ret = jQuery.parseJSON(data);
+            $('#name').html(ret.msg);
+            console.log('Success: ')
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error.message);
+            $('#name').html('Error connecting to the server.');
+        },
+      
+
+    })).then( function(){
+        console.log("DONE");
+    });
 });
 
   });
