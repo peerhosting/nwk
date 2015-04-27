@@ -116,8 +116,16 @@
         <div class="after well col-xs-3 col-sm-3 col-md-3 col-lg-3"> 
 
             <p><button id="upload_btn">Upload File</button></p>
-            <p><button id="mk_folder">Make Folder</button></p>
+              <form id = "uploadFile" enctype="multipart/form-data" action="/fileupload" method="post">
 
+                <div class="form-group">
+                   <h2>folder name</h2>
+                   <input type="text" name="name" class="form-control" id="folderName" placeholder="images">
+                 </div>
+               <button type="button" id="mk_folder">Make Folder</button>
+            </form>
+
+            <button type="button" id="publish">Make Folder</button>
 
 
 
@@ -202,8 +210,8 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
     $('#uploadName').click(function(){
         $.post( "/fileupload", {
                 name : $('#name').val()
-            }).done(function( data ) {
-                console.log(data);
+            }).done(function( rootFolder ) {
+                console.log(rootFolder);
                 $('.after').show();
 
                 var socket = io.connect('http://localhost:4000');
@@ -219,11 +227,20 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                 });
 
                 siofu.addEventListener("start", function(event){
-                    event.file.meta.name = data;
+                    event.file.meta.name = rootFolder;
                 });
 
                 $('#mk_folder').click(function(){
-                    socket.emit('makeDir', { name: 'cool' });
+                    socket.emit('makeDir', { name: $('#folderName').val() });
+                });
+
+                $('#publish').click(function(){
+                    $.post( "/beginseed", {
+                            loc : rootFolder
+                        }).done(function( infohash ) {
+                            console.log('the infohash -> '+ infohash);
+                        });
+                    
                 });
 
 
