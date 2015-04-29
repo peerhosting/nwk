@@ -4,7 +4,7 @@ var app = express();
 var fs = require('fs');
 
 var ursa = require('ursa');
-if (! fs.existsSync( '.keys/private')) {
+if (!fs.existsSync( '.keys/private')) {
     console.log("generating private & public keys")
     //var PassPhrase = Math.random().toString(36).substring(128); 
     // The length of the RSA key, in bits. 
@@ -19,21 +19,25 @@ if (! fs.existsSync( '.keys/private')) {
     var pubPem = keys.toPublicPem('base64');
     //console.log('pubPem:', pubPem);
     var pub = ursa.createPublicKey(pubPem, 'base64');
+    fs.mkdirSync('.keys');
     fs.writeFileSync('.keys/private', privPem);
     console.log('wrote new private key');
     fs.writeFileSync( '.keys/public', pubPem);
     console.log('wrote new public key');
+
+    
 }  else {
     console.log("private key exists");
     if (! fs.existsSync('.keys/public')) {
-	var data = fs.readFileSync('.keys/private', {"encoding":"utf8"});
-	var priv = ursa.createPrivateKey(data, '', 'base64');
-	// make a public key, to be used for encryption
-	var pubPem = priv.toPublicPem('base64');
-	//console.log('pubPem:', pubPem);
-	var pub = ursa.createPublicKey(pubPem, 'base64');
-	fs.writeFileSync('.keys/public', pubPem);
-	console.log('wrote new public key');
+    	var data = fs.readFileSync('.keys/private', {"encoding":"utf8"});
+    	var priv = ursa.createPrivateKey(data, '', 'base64');
+    	// make a public key, to be used for encryption
+    	var pubPem = priv.toPublicPem('base64');
+    	//console.log('pubPem:', pubPem);
+    	var pub = ursa.createPublicKey(pubPem, 'base64');
+        fs.mkdirSync('.keys/public');
+        fs.writeFileSync('.keys/public', pubPem);
+        console.log('wrote new public key');
     }
     else {
 	console.log("public key exists");}
