@@ -125,10 +125,20 @@
                <button type="button" id="mk_folder">Make Folder</button>
             </form>
 
-            <button type="button" id="publish">Make Folder</button>
+            <button type="button" id="publish">Publish</button>
+            
+
+            
+
+            <button type="button" id="status">Status</button>
+
+           
 
 
 
+        </div>
+        <div id="allFiles" class="well col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <h2>Here they are..</h2>
         </div>
 
       </div>
@@ -159,54 +169,7 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
   }
   
   $(document).ready(function(){
-
-
-
-       
-
-
-
-    // var selDiv = "";
-        
-    // function init() {
-    //   document.querySelector('#files').addEventListener('change', handleFileSelect, false);
-    //   selDiv = document.querySelector("#selectedFiles");
-    //   // var html = "<img src='/images/txt.png'><p>info.txt</p>";
-    //   selDiv.innerHTML += fileToIcon('text.txt');
-    // }
-
-    // init();
-
-
-
-
-    // function handleFileSelect(e) {
-     
-        
-    //   if(!e.target.files) return;
-    
-    //   selDiv.innerHTML = "";
-    //   var files = e.target.files;
-    //     var filesArr = Array.prototype.slice.call(files);
-    //     filesArr.forEach(function(f) {
-
-    //       var reader = new FileReader();
-    //       reader.onload = function (e) {
-    //         // var html = "<p>" + f.name + "</p>";
-    //         selDiv.innerHTML += fileToIcon(f.name);       
-    //       }
-    //       reader.readAsDataURL(f); 
-    //     });
-    // }
-
-    // function getName(){
-
-    //     var json = {
-    //         name : $('#name').val()
-    //     }
-    //     return json;
-    // }
-
+        var socket = io.connect('http://localhost:4000');
     $('#uploadName').click(function(){
         $.post( "/fileupload", {
                 name : $('#name').val()
@@ -214,7 +177,7 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                 console.log(rootFolder);
                 $('.after').show();
 
-                var socket = io.connect('http://localhost:4000');
+               
                 var siofu = new SocketIOFileUpload(socket);
                 
 
@@ -245,6 +208,27 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
 
 
               });
+
+    });
+
+
+    $('#status').click(function(){
+        console.log('ask About the status');
+        socket.emit('getStatus');
+
+
+        socket.on('sendStatus', function(data){
+            console.log(data.files);
+            var fileHTML;
+            for (var i = 0; i < data.files.length; i++) {
+                console.log(data.files[i]);
+                var temp = '<p>' + data.files[i] + '</p>';
+                fileHTML += temp;
+                console.log(fileHTML);
+            };
+            $('#allFiles').append(fileHTML);
+        });
+
 
     });
 
