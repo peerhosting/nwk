@@ -5,6 +5,10 @@
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->
     <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="javascripts/filesock.js"></script>
+    <script src="javascripts/socketio.js"></script>
+
+    
     <!-- Bootstrap JavaScript -->
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
    <!--  <script src="/lib/upload/js/controller.js"></script>
@@ -12,31 +16,20 @@
 
     <style>
 
-
-      #filedrag
-      {
-        display: none;
-        font-weight: bold;
-        text-align: center;
-        padding: 1em 0;
-        margin: 1em 0;
-        color: #555;
-        border: 2px dashed #555;
-        border-radius: 7px;
-        cursor: default;
+      .file {
+        width: 50%
+      }
+      
+      .fileWell {
+        margin-right: auto;
+        margin-left: auto;
       }
 
-      #filedrag.hover
-      {
-        color: #f00;
-        border-color: #f00;
-        border-style: solid;
-        box-shadow: inset 0 3px 4px #888;
-      }
       .btn-file {
           position: relative;
           overflow: hidden;
       }
+
       .btn-file input[type=file] {
           position: absolute;
           top: 0;
@@ -56,7 +49,9 @@
       #warn {
         display: none;
       }
-
+      .after {
+        display: none;
+      }
 
     </style>
 
@@ -96,26 +91,45 @@
                <h2>Website Name</h2>
                <input type="text" name="name" class="form-control" id="name" placeholder="My Website">
              </div>
-            
-             <br>
+            <button type="button" id="uploadName">Upload name</button>
+        </form>
+
+ <!--             <br>
              <br>
              <br>
              <span class="btn btn-default btn-file">
-                 Browse <input type="file", name="file", id="files" multiple directory webkitdirectory/>
+                 Browse <input type="file", name="file", id="files" multiple/>
              </span>
              <br>
              <br>
 
-            <div id="selectedFiles"></div>
+            <div class="well fileWell" id="selectedFiles">
+                
+            </div>
           
             <input id="up" class="btn btn-file" type="submit" value="Upload">  
 
-          </form>
+
+
+        </div> -->
+
+        <div class="after well col-xs-3 col-sm-3 col-md-3 col-lg-3"> 
+
+            <p><button id="upload_btn">Upload File</button></p>
+              <form id = "uploadFile" enctype="multipart/form-data" action="/fileupload" method="post">
+
+                <div class="form-group">
+                   <h2>folder name</h2>
+                   <input type="text" name="name" class="form-control" id="folderName" placeholder="images">
+                 </div>
+               <button type="button" id="mk_folder">Make Folder</button>
+            </form>
+
+            <button type="button" id="publish">Make Folder</button>
+
 
 
         </div>
-
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"> </div>
 
       </div>
     </div>
@@ -123,78 +137,118 @@
 
   </body>
   <script>
+
+var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/images/txt.png'];
+  var fileToIcon = function(fileName){
+    
+    var selectFile = 3;
+    if(fileName.split('.')[1] === 'css')
+      selectFile = 0;
+    else if(fileName.split('.')[1] === 'html')
+      selectFile = 1;
+    else if(fileName.split('.')[1] === 'js')
+      selectFile = 2;
+
+
+    var html = '';
+    html += '<div class="col-lg-3">';
+    html += '<img class="image-responsive file" src=' +fileArr[selectFile] + '>';
+    html += '<p class="text-center">' + fileName + '</p>';
+    html += '</div>';
+    return html;
+  }
   
   $(document).ready(function(){
 
-    var selDiv = "";
+
+
+       
+
+
+
+    // var selDiv = "";
         
-    function init() {
-      document.querySelector('#files').addEventListener('change', handleFileSelect, false);
-      selDiv = document.querySelector("#selectedFiles");
-    }
+    // function init() {
+    //   document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+    //   selDiv = document.querySelector("#selectedFiles");
+    //   // var html = "<img src='/images/txt.png'><p>info.txt</p>";
+    //   selDiv.innerHTML += fileToIcon('text.txt');
+    // }
 
-    init();
+    // init();
 
 
 
 
-    function handleFileSelect(e) {
+    // function handleFileSelect(e) {
      
         
-        if(!e.target.files) return;
-      
-        selDiv.innerHTML = "";
-        var files = e.target.files;
-            var filesArr = Array.prototype.slice.call(files);
-            filesArr.forEach(function(f) {
+    //   if(!e.target.files) return;
+    
+    //   selDiv.innerHTML = "";
+    //   var files = e.target.files;
+    //     var filesArr = Array.prototype.slice.call(files);
+    //     filesArr.forEach(function(f) {
 
-              var reader = new FileReader();
-              reader.onload = function (e) {
-                var html = "<p>" + f.name + "</p>";
-                selDiv.innerHTML += html;       
-              }
-              reader.readAsDataURL(f); 
-            });
-            // $('#numFiles').val(filesArr.length);
-        
-      }
+    //       var reader = new FileReader();
+    //       reader.onload = function (e) {
+    //         // var html = "<p>" + f.name + "</p>";
+    //         selDiv.innerHTML += fileToIcon(f.name);       
+    //       }
+    //       reader.readAsDataURL(f); 
+    //     });
+    // }
+
+    // function getName(){
+
+    //     var json = {
+    //         name : $('#name').val()
+    //     }
+    //     return json;
+    // }
+
+    $('#uploadName').click(function(){
+        $.post( "/fileupload", {
+                name : $('#name').val()
+            }).done(function( rootFolder ) {
+                console.log(rootFolder);
+                $('.after').show();
+
+                var socket = io.connect('http://localhost:4000');
+                var siofu = new SocketIOFileUpload(socket);
+                
+
+                // Configure the three ways that SocketIOFileUpload can read files:
+                document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
+
+                siofu.addEventListener("complete", function(event){
+                    console.log(event.success);
+                    console.log(event.file);
+                });
+
+                siofu.addEventListener("start", function(event){
+                    event.file.meta.name = rootFolder;
+                });
+
+                $('#mk_folder').click(function(){
+                    socket.emit('makeDir', { name: $('#folderName').val() });
+                });
+
+                $('#publish').click(function(){
+                    $.post( "/beginseed", {
+                            loc : rootFolder
+                        }).done(function( infohash ) {
+                            console.log('the infohash -> '+ infohash);
+                        });
+                    
+                });
 
 
-      function jsonMaker(siteName, files){
+              });
 
+    });
 
-        return json;
-      }
-
-    // $('#up').click(function(){
-    //   $('#warn').hide();
-    //   //console.log($('#name').val().equals(''));
-    //   // console.log('oafff');
-    //   if($('#name').val().length === 0){
-    //     $('#warn').show();
-    //     return;
-    //   }
-    //   $('#warn').hide();
-    //   var mySite = $('#name').val();
-      
-
-
-
-    //   $.ajax({
-    //     url: '/fileupload', 
-    //     type: 'post',
-    //     data: mySite,
-    //     success: function(data) {
-    //       alert('just came back from the server..');
-
-    //       console.log( data );
-    //     }, 
-        
-    //   });
-      
-
-    // });
-
+    
   });
   </script>
 </html>
