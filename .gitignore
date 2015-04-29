@@ -1,5 +1,9 @@
 /test.app
 /bower_components
 /node_modules
-/lib/local
+/lib/local/*
 /.keys/*
+
+!.gitignore
+!/lib/local/javascripts
+!/lib/local/images
