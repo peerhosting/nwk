@@ -118,7 +118,7 @@
             </div>
             
             <div  class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <h4>Files</h4><span id="deleteMode" class="text-left label label-danger">Delete Mode</span>
+                <h4>Files</h4><span id="deleteMode" class="text-right label label-danger">Delete Mode</span>
                 <div id="allFiles" class="well"></div>
                 
             </div>
@@ -239,6 +239,12 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
        
                     $('#allFiles').empty();
                     $('#allFiles').append(fileHTML);
+                });
+
+                socket.on('deleteFailed', function(){
+                  var temp = '<span class="fail label label-danger">Cannot delete folder with contents</span>';
+                  $('#allFiles').append(temp);
+                  $( ".fail" ).fadeOut(5000);
                 });
 
 
