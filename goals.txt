@@ -1,0 +1,12 @@
+goals.txt
+
+/jon goals
+
+get most recent torrent file
+
+/graham
+
+make things look better
+browsing to implemented
+
+There is already a swarm with infoHash 090cbac6ff50be845fd2a1604e1b1ed2b10603ba listening on port 6611

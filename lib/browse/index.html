@@ -57,21 +57,29 @@
           var mag = JSON.parse(data);
           console.log(mag);
           var newLink;
-
+          var newHTML = '';
           jQuery.each(mag, function(key, val) {
-            jQuery('<h4/>', {
-                class: 'magnet',
-                text: val
-            }).appendTo('#magLinkCon');
+            console.log(val);
+            
+            var k = Object.keys(val)[0];
+            console.log(k);
+            console.log(val[k]);
+            var temp = '<p>Name :' + k + ' maglink: <small> <span class="magnet">';
+            temp += val[k] + '</span>';
+            temp += '<small></p>';
+
+            newHTML += temp;
 
           });
+
+          $('#magLinkCon').append(newHTML);
           
         }
       });
 
 
 
-    $("#magLinkCon").on('click', 'h4.magnet', function() {
+    $("#magLinkCon").on('click', 'span.magnet', function() {
         console.log($(this).text());
         var magLink = $(this).text();
         var mag = {
