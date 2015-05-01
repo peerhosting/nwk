@@ -71,7 +71,12 @@
 
 
     <hr> 
-
+    <div id="hidden" class="jumbotron">
+      <div class="container">
+         <h3>Animated button</h3>
+      <button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
+      </div>
+    </div>
     <div class="jumbotron">
 
       <div class="container">
@@ -170,6 +175,14 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
         var upAllowed = 0;
         var root = '';
         var toDelete = false;
+
+        socket.on('updateMySite', function (data){
+          console.log(data.siteName);
+          $('#name').val(data.siteName);
+          console.log('set title to upload or something');
+          $( "#uploadName" ).trigger( "click" );
+
+        });
        
    
 
@@ -189,7 +202,6 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
 
                
                 var siofu = new SocketIOFileUpload(socket);
-                
 
                 // Configure the three ways that SocketIOFileUpload can read files:
                 document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
@@ -308,6 +320,7 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                 });
                 socket.on('root', function(data){
                   var rDir = data.root;
+
                   $.post( "/beginseed", {
                           loc : rDir
                       }).done(function( infohash ) {
