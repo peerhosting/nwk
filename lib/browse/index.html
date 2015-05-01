@@ -54,23 +54,29 @@
         url: '/magnetURI', 
         type: 'get', 
         success: function(data){
+
           var mag = JSON.parse(data);
           console.log(mag);
-          var newLink;
           var newHTML = '';
-          jQuery.each(mag, function(key, val) {
-            console.log(val);
-            magDictionary = val;
-            var k = Object.keys(magDictionary)[0];
-            console.log(magDictionary[k]['info']);
-            var temp = '<p class="namez" id="'+ k +'">Name :' + k + ' maglink: <small> <span class="magnet">';
-            temp += magDictionary[k].info + '</span>';
-            temp += '<small></p>';
+          if(mag.length === 0){
+            newHTML += '<h2>Nothing on network, submit your own website!</h2>';
+          } else {
+            var newLink;
+            
+            jQuery.each(mag, function(key, val) {
+              console.log(val);
+              magDictionary = val;
+              var k = Object.keys(magDictionary)[0];
+              console.log(magDictionary[k]['info']);
+              var temp = '<p class="namez" id="'+ k +'">Name :' + k + ' maglink: <small> <span class="magnet">';
+              temp += magDictionary[k].info + '</span>';
+              temp += '<small></p>';
 
-            newHTML += temp;
+              newHTML += temp;
 
-          });
-
+            });
+          }
+          
           $('#magLinkCon').append(newHTML);
           
         }

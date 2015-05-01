@@ -52,7 +52,8 @@ var navigate = require('./lib/navigate');
 var files = require('./lib/files');
 var update = require('./lib/update');
 var surf = require('./lib/surf');
-// console.log(path.join(__dirname, './local'));
+
+
 app.use(express.static(path.join(__dirname, './lib/local')));
 
 
@@ -63,6 +64,7 @@ app.use(navigate);
 app.use(update);
 app.use(files);
 app.use(surf);
+
 
 
 app.listen(3000, function(){

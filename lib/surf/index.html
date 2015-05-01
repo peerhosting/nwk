@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>host</title>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="javascripts/filesock.js"></script>
+    <script src="javascripts/socketio.js"></script>
+
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+   <!--  <script src="/lib/upload/js/controller.js"></script>
+    <script src="nwk/lib/upload/js/controller.js"></script> -->
+
+    <style>
+
+      .file {
+        width: 50%
+      }
+      
+      .fileWell {
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .btn-file {
+          position: relative;
+          overflow: hidden;
+      }
+
+      .btn-file input[type=file] {
+          position: absolute;
+          top: 0;
+          right: 0;
+          min-width: 100%;
+          min-height: 100%;
+          font-size: 100px;
+          text-align: right;
+          filter: alpha(opacity=0);
+          opacity: 0;
+          outline: none;
+          background: white;
+          cursor: inherit;
+          display: block;
+      }
+
+      #warn {
+        display: none;
+      }
+      .after {
+        display: none;
+      }
+
+    </style>
+
+  </head>
+  <body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <a class="navbar-brand" href="/">colony</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="/browse">browse</a>
+      </li>
+      <li>
+        <a href="/upload">upload</a>
+      </li>
+    </ul>
+  </nav>
+
+
+    <hr> 
+ <!--    <div id="hidden" class="jumbotron">
+      <div class="container">
+         <h3>Animated button</h3>
+      <button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
+      </div>
+    </div> -->
+    <div class="jumbotron">
+
+      <div class="container">
+
+
+      <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"> </div>
+          
+           
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center input-group ">
+
+          <!--  -->
+
+  
+
+            
+          <h1 id="siteName">Website Name</h1>
+            
+          
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"> </div>
+      </div>
+
+        <div class="container after">
+          <div class="row">
+            <div class="well col-xs-6 col-sm-6 col-md-6 col-lg-6"> 
+
+                <p><button id="upload_btn">Upload File</button></p>
+                  <form id = "uploadFile" class="btn btn-default text-center" enctype="multipart/form-data" action="" method="post">
+
+                    <div class="text-center form-group">
+                       <h4>Folder Name</h4>
+                       <input type="text" name="name" class="form-control" id="folderName" placeholder="images, js, ect..">
+                     </div>
+                   <button type="button" class="btn btn-default" id="mk_folder">Make Folder</button>
+                </form>
+
+                <button type="button" class="btn btn-default" id="publish">publish</button>
+              
+                <button type="button" class="btn btn-danger" id="delete">delete</button>
+                
+            </div>
+            
+            <div  class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <h4>Files</h4><span id="deleteMode" class="text-right label label-danger">Delete Mode</span>
+                <div id="allFiles" class="well"></div>
+                
+            </div>
+
+          </div>
+          
+
+        </div>
+    </div>
+
+
+  </body>
+  <script>
+
+
+  var isFile = function(name){
+    if(name.split('.').length === 1){
+      console.log('cool, we have a folder');
+      return false;
+    } else {
+      console.log('cool, we have a file');
+      return true;
+    }
+  }
+  
+  $(document).ready(function(){
+        // first we need to get the name of our folder!
+
+      $.get( "/getMyDir", function( rootFolder ) {
+        console.log(rootFolder);
+        rootFolder = rootFolder.replace('/','')
+        $('#siteName').text(rootFolder);
+
+        var socket = io.connect('http://localhost:4000');
+        // keeps track if we need to print an option 
+        // to navigate up
+        var upAllowed = 0;
+        var root = '';
+        var toDelete = false;
+
+        socket.emit('setRoot', {root : root});
+         console.log(rootFolder);
+         $('.before').show();
+         $('.after').show();
+          $('#deleteMode').hide();
+         
+
+        
+         var siofu = new SocketIOFileUpload(socket);
+
+         // Configure the three ways that SocketIOFileUpload can read files:
+         document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
+
+         siofu.addEventListener("complete", function(event){
+             console.log(event.success);
+             console.log(event.file);
+             // socket.emit('getStatus');
+         });
+
+         siofu.addEventListener("start", function(event){
+             event.file.meta.name = rootFolder;
+         });
+
+         $('#mk_folder').click(function(){
+             console.log('make a dir');
+             socket.emit('makeDir', { name: $('#folderName').val() });
+             $('#folderName').val('');
+         });
+
+
+
+
+      });
+
+  });
+        // $.get( "/getMySite", function( rootFolder ) {
+
+        //   var socket = io.connect('http://localhost:4000');
+        //   // keeps track if we need to print an option 
+        //   // to navigate up
+        //   var upAllowed = 0;
+        //   var root = '';
+        //   var toDelete = false;
+
+          
+        //         $('#uploadName').click(function(){
+
+
+        //             root = $('#name').val();
+        //             $.post( "/fileupload", {
+        //                     name : $('#name').val()
+        //                 }).done(function( rootFolder ) {
+
+        //                     socket.emit('setRoot', {root : root});
+        //                     console.log(rootFolder);
+        //                     $('.before').show();
+        //                     $('.after').show();
+        //                      $('#deleteMode').hide();
+                            
+
+                           
+        //                     var siofu = new SocketIOFileUpload(socket);
+
+        //                     // Configure the three ways that SocketIOFileUpload can read files:
+        //                     document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
+
+        //                     siofu.addEventListener("complete", function(event){
+        //                         console.log(event.success);
+        //                         console.log(event.file);
+        //                         // socket.emit('getStatus');
+        //                     });
+
+        //                     siofu.addEventListener("start", function(event){
+        //                         event.file.meta.name = rootFolder;
+        //                     });
+
+        //                     $('#mk_folder').click(function(){
+        //                         console.log('make a dir');
+        //                         socket.emit('makeDir', { name: $('#folderName').val() });
+        //                         $('#folderName').val('');
+        //                     });
+
+
+        //                     // socket.on('madeDir', function(){
+
+        //                     //    socket.emit('getStatus', {root: root});
+        //                     // })
+
+        //                     socket.on('sendStatus', function(data){
+        //                         console.log(data);
+        //                         var fileHTML = '';
+        //                         if(upAllowed !== 0){
+        //                           fileHTML += '<p class="up">go back up</p>';
+        //                         }
+        //                         if(data.files === undefined || data.files == undefined || data.files.length === 0){
+        //                           fileHTML += '<p>folder empty</p>';
+        //                         } else {
+        //                           for (var i = 0; i < data.files.length; i++) {
+        //                               console.log(data.files[i]);
+        //                               if(isFile(data.files[i])){
+        //                                 var temp = '<p class="file">' + data.files[i] + '</p>';  
+        //                               } else {
+        //                                 var temp = '<p class="folder">' + data.files[i] + '</p>';
+        //                               }
+                                      
+        //                               fileHTML += temp;
+        //                               // console.log(fileHTML);
+        //                           };
+        //                         }
+                   
+        //                         $('#allFiles').empty();
+        //                         $('#allFiles').append(fileHTML);
+        //                     });
+
+        //                     socket.on('deleteFailed', function(){
+        //                       var temp = '<span class="fail label label-danger">Cannot delete folder with contents</span>';
+        //                       $('#allFiles').append(temp);
+        //                       $( ".fail" ).fadeOut(5000);
+        //                     });
+
+
+        //                     // changes directory down
+        //                     $('#allFiles').on('click', '.folder',function(){
+        //                       console.log($(this).text());
+        //                       var dest = $(this).text();
+        //                       console.log(dest);
+        //                       if(toDelete){
+        //                         var r = confirm("Are you sure you want to delete this folder?");
+        //                         if (r == true) {
+        //                           console.log('fine! lets delete');
+        //                           socket.emit('deleteFolder', {folderName : dest});
+        //                           toDelete = false; 
+        //                         }
+        //                         else {
+        //                           console.log('chickened out');
+        //                           toDelete = false;
+        //                         }
+        //                         $('#deleteMode').hide();
+        //                       } else {
+        //                         upAllowed++;
+        //                         console.log('level - > ' + upAllowed);
+        //                         socket.emit('changeFolder', {loc : dest});
+        //                       }
+                              
+
+        //                     });
+
+        //                     $('#allFiles').on('click', '.file',function(){
+        //                       console.log($(this).text());
+        //                       var dest = $(this).text();
+        //                       if(toDelete){
+        //                         var r = confirm("Are you sure you want to delete this file?");
+        //                         if (r == true) {
+        //                           console.log('fine! lets delete');
+        //                           socket.emit('deleteFile', {fileName : dest}); 
+        //                           toDelete = false;
+        //                         }
+        //                         else {
+        //                           console.log('chickened out');
+        //                           toDelete = false;
+
+        //                         }
+        //                         $('#deleteMode').hide();
+        //                       }
+                             
+
+        //                     });
+
+        //                     // changes directory up
+        //                     $('#allFiles').on('click', '.up',function(){
+        //                       if(upAllowed === 0){
+        //                         console.log('shoot, something broke');
+        //                       }
+        //                       upAllowed--;
+        //                       console.log('level - > ' + upAllowed);
+        //                       socket.emit('goUp');
+
+        //                     });
+        //                     socket.on('root', function(data){
+        //                       var rDir = data.root;
+
+        //                       $.post( "/beginseed", {
+        //                               loc : rDir
+        //                           }).done(function( infohash ) {
+        //                             // take them to their site! 
+        //                               console.log('the infohash -> '+ infohash);
+        //                           });
+
+        //                     })
+
+        //                     $('#publish').click(function(){
+        //                       socket.emit('getRoot');
+                             
+                                
+        //                     });
+
+        //               });
+        //         });
+
+
+
+
+
+
+        //         $('#delete').click(function(){
+        //             // we want to delete
+        //             if(!toDelete){
+        //               alert('Click what you want to delete');
+        //               toDelete = true;    
+        //               $('#deleteMode').show();
+        //             } else {
+        //               // we dont want to delete
+        //               alert('Leaving delete mode');
+        //               toDelete = false;
+        //               $('#deleteMode').hide();
+        //             }
+                    
+
+        //             socket.emit('getStatus');
+
+
+
+
+
+        //         });
+
+                
+
+
+
+
+        //     });
+
+
+
+
+
+  
+       
+   
+
+
+    
+  </script>
+</html>

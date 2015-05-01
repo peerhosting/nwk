@@ -148,13 +148,22 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
       selectFile = 1;
     else if(fileName.split('.')[1] === 'js')
       selectFile = 2;
+    else
+      selectFile = 3;
 
 
     var html = '';
-    html += '<div class="col-lg-3">';
-    html += '<img class="image-responsive file" src=' +fileArr[selectFile] + '>';
-    html += '<p class="text-center">' + fileName + '</p>';
-    html += '</div>';
+    //html += '<div class="col-lg-3">';
+    html += '<img class="image-responsive file" src="' +fileArr[selectFile] + '">';
+    // html += '<p class="text-center">' + fileName + '</p>';
+    // html += '</div>';
+    return html;
+  }
+  var folderToIcon = function(){
+    var html = '<span class="col-xs-2 col-sm-2 col-md-2 col-lg-2">';
+    html += '<img width="30px" class="image-responsive file" src="images/folder.png">';
+    // html += '<p class="text-center">' + fileName + '</p>';
+    html += '</span>';
     return html;
   }
 
@@ -197,7 +206,7 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                 console.log(rootFolder);
                 $('.before').show();
                 $('.after').show();
-                 $('#deleteMode').hide();
+                $('#deleteMode').hide();
                 
 
                
@@ -229,7 +238,7 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                 // })
 
                 socket.on('sendStatus', function(data){
-                    console.log(data);
+                    // console.log(data);
                     var fileHTML = '';
                     if(upAllowed !== 0){
                       fileHTML += '<p class="up">go back up</p>';
@@ -238,11 +247,13 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                       fileHTML += '<p>folder empty</p>';
                     } else {
                       for (var i = 0; i < data.files.length; i++) {
-                          console.log(data.files[i]);
+                          // console.log(data.files[i]);
                           if(isFile(data.files[i])){
-                            var temp = '<p class="file">' + data.files[i] + '</p>';  
+                            var temp = '<p class="file">' + data.files[i] + '</p>';
+                            //temp += fileToIcon(data.files[i]);  
                           } else {
                             var temp = '<p class="folder">' + data.files[i] + '</p>';
+                            // temp += folderToIcon();
                           }
                           
                           fileHTML += temp;
