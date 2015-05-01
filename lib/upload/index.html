@@ -329,14 +329,18 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                   socket.emit('goUp');
 
                 });
+
+
                 socket.on('root', function(data){
                   var rDir = data.root;
 
                   $.post( "/beginseed", {
                           loc : rDir
-                      }).done(function( infohash ) {
+                      }).done(function( folder ) {
                         // take them to their site! 
-                          console.log('the infohash -> '+ infohash);
+                          // console.log('the infohash -> '+ infohash);
+                          var goTo = 'http://localhost:3000/' + rDir;
+                          window.location.href = goTo;
                       });
 
                 })

@@ -76,10 +76,11 @@
 
             });
           }
-          
+
           $('#magLinkCon').append(newHTML);
           
         }
+
       });
 
 
@@ -100,7 +101,8 @@
          data: mag,
          success: function(data){
           console.log(data);
-          window.location.href = data;
+          var goTo = 'http://localhost:3000/' + data;
+          window.location.href = goTo;
          }
        });
 
