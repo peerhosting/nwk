@@ -207,7 +207,7 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                 $('#mk_folder').click(function(){
                     console.log('make a dir');
                     socket.emit('makeDir', { name: $('#folderName').val() });
-                    $('#folderName').val() = '';
+                    $('#folderName').val('');
                 });
 
 
