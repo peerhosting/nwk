@@ -305,14 +305,20 @@ var fileArr = ['/images/css.png', '/images/html.png',  '/images/js.png', '/image
                   socket.emit('goUp');
 
                 });
+                socket.on('root', function(data){
+                  var rDir = data.root;
+                  $.post( "/beginseed", {
+                          loc : rDir
+                      }).done(function( infohash ) {
+                        // take them to their site! 
+                          console.log('the infohash -> '+ infohash);
+                      });
+
+                })
 
                 $('#publish').click(function(){
-                    $.post( "/beginseed", {
-                            loc : rootFolder
-                        }).done(function( infohash ) {
-                          // take them to their site! 
-                            console.log('the infohash -> '+ infohash);
-                        });
+                  socket.emit('getRoot');
+                 
                     
                 });
 
