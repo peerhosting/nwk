@@ -62,10 +62,9 @@
             console.log(val);
             magDictionary = val;
             var k = Object.keys(magDictionary)[0];
-            console.log(k);
-            console.log(magDictionary[k]);
+            console.log(magDictionary[k]['info']);
             var temp = '<p class="namez" id="'+ k +'">Name :' + k + ' maglink: <small> <span class="magnet">';
-            temp += magDictionary[k] + '</span>';
+            temp += magDictionary[k].info + '</span>';
             temp += '<small></p>';
 
             newHTML += temp;
@@ -83,7 +82,7 @@
         console.log($(this).attr('id'));
         var name = $(this).attr('id');
 
-        var magLink = magDictionary[name];
+        var magLink = magDictionary[name].info;
         var mag = {
           'mag' : magLink,
           'namez': name
