@@ -49,7 +49,7 @@
   <script type="text/javascript">
 
   $(document).ready(function(){ 
-
+    var magDictionary = {};
       $.ajax({
         url: '/magnetURI', 
         type: 'get', 
@@ -60,12 +60,12 @@
           var newHTML = '';
           jQuery.each(mag, function(key, val) {
             console.log(val);
-            
-            var k = Object.keys(val)[0];
+            magDictionary = val;
+            var k = Object.keys(magDictionary)[0];
             console.log(k);
-            console.log(val[k]);
-            var temp = '<p>Name :' + k + ' maglink: <small> <span class="magnet">';
-            temp += val[k] + '</span>';
+            console.log(magDictionary[k]);
+            var temp = '<p class="namez" id="'+ k +'">Name :' + k + ' maglink: <small> <span class="magnet">';
+            temp += magDictionary[k] + '</span>';
             temp += '<small></p>';
 
             newHTML += temp;
@@ -79,11 +79,14 @@
 
 
 
-    $("#magLinkCon").on('click', '.magnet', function() {
-        console.log($(this).text());
-        var magLink = $(this).text();
+    $("#magLinkCon").on('click', '.namez', function() {
+        console.log($(this).attr('id'));
+        var name = $(this).attr('id');
+
+        var magLink = magDictionary[name];
         var mag = {
-          'mag' : magLink
+          'mag' : magLink,
+          'namez': name
         }
 
        $.ajax({
